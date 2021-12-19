@@ -1,0 +1,20 @@
+class Solution:
+    def removeBoxes(self, boxes: List[int]) -> int:
+        
+        @cache
+        def solve(left: int, right: int, k: int):
+            if left > right:
+                return 0
+            
+            # k 를 그냥 사용
+            ret = (k + 1) * (k + 1) + solve(left + 1, right, 0)
+            
+            for i in range(left + 1, right + 1):
+                # i 까지 점수 계산, 그 뒤에 나온거로 합쳐서 계산            
+                if boxes[i] == boxes[left]:
+                    ret = max(ret, solve(left + 1, i - 1, 0) + solve(i, right, k + 1))
+            
+            return ret
+        
+        return solve(0, len(boxes) - 1, 0)
+    
