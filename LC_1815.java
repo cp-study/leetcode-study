@@ -34,7 +34,7 @@ class LC_1815 {
         }
 
         int res = 0;
-        for(int i=0;i<batchSize;i++) {
+        for(int i=1;i<batchSize;i++) {
             if(cntList.get(i) > 0) {
                 cntList.set(i, cntList.get(i)-1);
                 res = Math.max(res,(left==0?1:0) + dfs(cntList,(batchSize + left + i) % batchSize, batchSize));
