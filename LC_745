@@ -1,0 +1,44 @@
+class WordFilter(words: Array<String>) {
+    inner class TrieNode {
+        var children: Array<TrieNode?> = arrayOfNulls(27)
+        var weight: Int = 0
+        fun insert(s: String, weight: Int) {
+            var cur: TrieNode? = root
+            for (c in s.toCharArray()) {
+                val n = c - 'a'
+                if (cur!!.children[n] == null) {
+                    cur.children[n] = TrieNode()
+                }
+                cur = cur.children[n]
+                cur!!.weight = weight
+            }
+        }
+
+        fun startsWith(prefix: String): Int {
+            var cur = root
+            for (c in prefix.toCharArray()) {
+                val next = cur.children[c - 'a'] ?: return -1
+                cur = next
+            }
+            return cur.weight
+        }
+
+    }
+
+    var root: TrieNode
+    fun f(prefix: String, suffix: String): Int {
+        return root.startsWith("$suffix{$prefix")
+    }
+
+    // apple -> {apple, e{apple, le{apple, ple{apple, pple{apple, apple{apple;
+    init {
+        root = TrieNode()
+        val len = words.size
+        for (i in 0 until len) {
+            val s = words[i]
+            for (j in 0..s.length) {
+                root.insert(s.substring(j, s.length) + '{' + s, i)
+            }
+        }
+    }
+}
